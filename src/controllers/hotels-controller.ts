@@ -8,9 +8,23 @@ export async function getHotels(req: AuthenticatedRequest, res: Response) {
   console.log("\n GET HOTELS CONTROLER \n");
 
   try {
-    await hotelsServices.getHotelsList(userId);
+    const hotels = await hotelsServices.getHotelsList(userId);
+    console.log("\n hotels from getHotels in controller", hotels);
+    return res.status(httpStatus.OK).send(hotels);
+  } catch (error) {
+    return res.sendStatus(httpStatus.NOT_FOUND);
+  }
+}
 
-    return res.sendStatus(httpStatus.OK);
+export async function getRoomsFromHotel(req: AuthenticatedRequest, res: Response) {
+  const hotelId  = Number(req.params.hotelId);
+  console.log("GET ROOMS FROM HOTEL CONTROLLER");
+
+  try {
+    const rooms = await hotelsServices.getRoomsFromHotel(hotelId);
+    console.log("\n room from getRoomsFromHotel in controller", rooms);
+
+    return res.status(httpStatus.OK).send(rooms);
   } catch (error) {
     return res.sendStatus(httpStatus.NOT_FOUND);
   }
