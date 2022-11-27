@@ -1,20 +1,25 @@
 import hotelsRepository from "@/repositories/hotels-repository";
 import ticketRepository from "@/repositories/ticket-repository";
 import enrollmentRepository, { CreateEnrollmentParams } from "@/repositories/enrollment-repository";
-import { notFoundError } from "@/errors";
-import { Console } from "console";
+import { enrollmentNotFound, noneTicketFound, ticketFoundNotValid } from "./erros";
 
 async function getHotelsList(userId: number) {
-  console.log("\n GET HOTELS LIST SERVICE");
+  console.log("\n GET HOTELS LIST SERVICE", userId);
 
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+  if(!enrollment) {
+    throw enrollmentNotFound(); 
+  }
+
   const ticket= await ticketRepository.findTicketByEnrollmentId(enrollment.id);
 
   if (!ticket) { 
-    throw notFoundError(); 
+    console.log("none Ticket Found");
+    throw noneTicketFound(); 
   }
-  if(ticket.TicketType.includesHotel !== true || ticket.TicketType.isRemote !== false ) {
-    throw notFoundError(); //preciso mudar
+  if(ticket.TicketType.includesHotel !== true || ticket.TicketType.isRemote !== false || ticket.status !== "PAID") {
+    console.log("Ticket Not Valid");
+    throw ticketFoundNotValid(); //preciso mudar
   }
 
   const hotelsList = await hotelsRepository.findHotels();
