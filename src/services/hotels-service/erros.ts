@@ -9,8 +9,8 @@ export function noneTicketFound(): ApplicationError {
 
 export function ticketFoundNotValid(): ApplicationError {
   return {
-    name: "ticketNotValid",
-    message: "The ticket found is not valid",
+    name: "invalidTicket",
+    message: "The ticket found is invalid",
   };
 }
 

@@ -5,21 +5,18 @@ import httpStatus from "http-status";
 
 export async function getHotels(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
-  console.log("userId :", userId);
-  console.log("\n GET HOTELS CONTROLER \n");
 
   try {
     const hotels = await hotelsServices.getHotelsList(userId);
-    console.log("\n hotels from getHotels in controller", hotels);
+
     return res.status(httpStatus.OK).send(hotels);
   } catch (error) {
-    console.log("error :", error);
     if (error.name === "ticketNotFound") {
       return res.status(httpStatus.NOT_FOUND).send(error);
     }
-    if (error.name === "ticketNotValid") {
-      return res.status(httpStatus.UNAUTHORIZED).send(error);
-    }
+    if (error.name === "invalidTicket") {                    
+      return res.status(httpStatus.BAD_REQUEST).send(error);
+    } 
     if (error.name === "enrollmentNotFound") {
       return res.status(httpStatus.NOT_FOUND).send(error);
     }

@@ -6,13 +6,11 @@ import eventsService from "../events-service";
 import { duplicatedEmailError } from "./errors";
 
 export async function createUser({ email, password }: CreateUserParams): Promise<User> {
-  // DESFAZER ISSO
-  // await canEnrollOrFail();
+  await canEnrollOrFail();
 
   await validateUniqueEmailOrFail(email);
 
   const hashedPassword = await bcrypt.hash(password, 12);
-  console.log("senha criptografada :", hashedPassword);
 
   return userRepository.create({
     email,
