@@ -11,9 +11,9 @@ async function createRoom(name: string, capacity: number, hotelId: number) {
 }
 
 async function findRoomById( roomId: number ) {
-  return prisma.room.findUnique({
-    where: {
-      id: roomId
+  return await prisma.room.findFirst({
+    where: { 
+      id: +roomId 
     },
     include: {
       Hotel: true

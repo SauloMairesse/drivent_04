@@ -3,7 +3,8 @@ import bookingRepositor from "@/repositories/booking-repository";
 import enrollmentRepository from "@/repositories/enrollment-repository";
 import roomRepository from "@/repositories/room-repository";
 import ticketRepository from "@/repositories/ticket-repository";
-import { enrollmentNotFound, roomIdInvalid, ticketInvalid } from "./error";
+import { BAD_REQUEST } from "http-status";
+import { bookingDoesNotBelongToUser, bookingIdInvalid, enrollmentNotFound, roomIdInvalid, ticketInvalid } from "./error";
 
 async function getBooking(userId: number) {
   const booking = await bookingRepositor.findBookingByUserId(userId);
@@ -22,16 +23,19 @@ async function postBookingService(userId: number, roomId: number) {
   await verifyRoom(roomId);
   await verifyTicketOfUser(userId);
 
-  const bookingId = await bookingRepositor.createBooking(userId, roomId);
+  const booking = await bookingRepositor.createBooking(userId, roomId);
 
-  return bookingId;
+  return booking;
 }
 
 async function verifyRoom(roomId: number) {
   const room = await roomRepository.findRoomById(roomId);
-  const bookingsAlreadyDone = await bookingRepositor.findBookingByRoomId(roomId);
+  if(!room) {
+    throw notFoundError();
+  }
 
-  if(!room || room.capacity >= bookingsAlreadyDone.length ) {
+  const bookingsAlreadyDone = await bookingRepositor.findBookingByRoomId(roomId);
+  if( room.capacity <= bookingsAlreadyDone.length ) {
     throw roomIdInvalid();
   }
 }
@@ -48,23 +52,28 @@ async function verifyTicketOfUser(userId: number) {
   }
 }
 
-async function putBookingService(userId: number, roomId: number) {
-  const bookingId = await verifyBooking(userId, roomId);
-
+async function putBookingService(userId: number, bookingId: number, roomId: number) {
+  await verifyBooking(bookingId, userId);
   await verifyRoom(roomId);
 
-  const booking = await bookingRepositor.updateBooking(bookingId.id, roomId);
+  const booking = await bookingRepositor.updateBooking(bookingId, roomId);
 
   return booking;
 }
 
-async function verifyBooking(userId: number, roomId: number) {
-  const booking = await bookingRepositor.findBookingByRoomIdAndUserId(userId, roomId);
+async function verifyBooking(bookingId: number, userId: number) {
+  if(bookingId <= 0 ) {
+    throw bookingIdInvalid();
+  }
+
+  const booking = await bookingRepositor.findBookingById(bookingId);
+  
   if(!booking) {
     throw notFoundError();
   }
-
-  return booking;
+  if(booking.userId !== userId) {
+    throw bookingDoesNotBelongToUser();
+  }
 }
 
 const bookingService = {

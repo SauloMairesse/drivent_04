@@ -20,3 +20,17 @@ export function roomIdInvalid(): ApplicationError {
     message: "RoomId invalid",
   };
 }
+
+export function bookingDoesNotBelongToUser(): ApplicationError {
+  return {
+    name: "bookingDoesNotBelongToUser",
+    message: "booking does not belong to user",
+  };
+}
+
+export function bookingIdInvalid(): ApplicationError {
+  return {
+    name: "bookingIdInvalid",
+    message: "bookingIdInvalid does not belong to user",
+  };
+}

@@ -3,8 +3,8 @@ import { prisma } from "@/config";
 async function createBooking(userId: number, roomId: number) {
   return prisma.booking.create({
     data: {
-      userId: userId,
-      roomId: roomId
+      userId: +userId,
+      roomId: +roomId
     }
   });
 }
@@ -23,16 +23,15 @@ async function findBookingByUserId(userId: number) {
 async function findBookingByRoomId(roomId: number) {
   return prisma.booking.findMany({
     where: {
-      roomId: roomId
+      roomId: +roomId
     }
   });
 }
 
-async function findBookingByRoomIdAndUserId(userId: number, roomId: number) {
-  return prisma.booking.findFirst({
+async function findBookingById(bookingId: number) {
+  return prisma.booking.findUnique({
     where: {
-      userId: userId,
-      roomId: roomId
+      id: bookingId
     }
   });
 }
@@ -40,10 +39,10 @@ async function findBookingByRoomIdAndUserId(userId: number, roomId: number) {
 async function updateBooking(bookingId: number, newRoomId: number) {
   return prisma.booking.update({
     where: {
-      id: bookingId
+      id: +bookingId
     },
     data: {
-      roomId: newRoomId
+      roomId: +newRoomId
     }
   });
 }
@@ -53,7 +52,7 @@ const bookingRepositor = {
   findBookingByRoomId,
   findBookingByUserId,
   updateBooking,
-  findBookingByRoomIdAndUserId
+  findBookingById
 };
 
 export default bookingRepositor;

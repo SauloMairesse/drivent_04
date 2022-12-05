@@ -71,7 +71,6 @@ describe("Testando Router /hotels/", () => {
     const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
 
     const response = await server.get("/hotels/").set("Authorization", `Bearer ${token}`);
-    console.log("RESPONSE :", response.body);
     
     expect(response.status).toBe(httpStatus.OK);
   });
