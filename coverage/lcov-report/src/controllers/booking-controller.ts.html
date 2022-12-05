@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85% </span>
+                <span class="strong">92.1% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>34/40</span>
+                <span class='fraction'>35/38</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85% </span>
+                <span class="strong">92.1% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>34/40</span>
+                <span class='fraction'>35/38</span>
             </div>
         
             
@@ -128,10 +128,7 @@
 <a name='L63'></a><a href='#L63'>63</a>
 <a name='L64'></a><a href='#L64'>64</a>
 <a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L66'></a><a href='#L66'>66</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
@@ -141,7 +138,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -151,13 +147,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -166,12 +162,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -197,7 +192,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { AuthenticatedRequest } from "@/middlewares";
 import bookingService from "@/services/booking-service.ts";
@@ -209,7 +203,6 @@ export async function getBookingController(req: AuthenticatedRequest, res: Respo
 &nbsp;
   try {
     const booking = await bookingService.getBooking(userId);
-&nbsp;
 <span class="cstat-no" title="statement not covered" >    return res.status(httpStatus.OK).send(booking);</span>
   } catch (error) {
     if (error.name === "NotFoundError") {
@@ -233,24 +226,23 @@ export async function postBookingController(req: AuthenticatedRequest, res: Resp
     <span class="missing-if-branch" title="if path not taken" >I</span>if (error.name === "roomIdInvalid") {
 <span class="cstat-no" title="statement not covered" >      return res.status(httpStatus.FORBIDDEN).send(error);</span>
     }
-    if (error.name === "enrollmentOfUserNotFound") {
-      return res.status(httpStatus.FORBIDDEN).send(error);
-    }
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (error.name === "ticketInvalid") {</span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (error.name === "enrollmentOfUserNotFound") {
 <span class="cstat-no" title="statement not covered" >      return res.status(httpStatus.FORBIDDEN).send(error);</span>
     }
-<span class="cstat-no" title="statement not covered" >    return res.sendStatus(httpStatus.BAD_REQUEST);</span>
+    if (error.name === "ticketInvalid") {
+      return res.status(httpStatus.FORBIDDEN).send(error);
+    }
   }
 }
 &nbsp;
 export async function putBookingController(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
-  const bookingId = +req.params.bookingId
+  const bookingId = req.params.bookingId;
   const { roomId } = req.body;
 &nbsp;
   try {
-    const booking = await bookingService.putBookingService(userId, bookingId, roomId);
-    return res.status(httpStatus.OK).send({bookingId: booking.id} );
+    const booking = await bookingService.putBookingService(userId, Number(bookingId), Number(roomId));
+    return res.status(httpStatus.OK).send({ bookingId: booking.id } );
   } catch (error) {
     if (error.name === "NotFoundError") {
       return res.sendStatus(httpStatus.NOT_FOUND);
@@ -264,17 +256,16 @@ export async function putBookingController(req: AuthenticatedRequest, res: Respo
     if (error.name === "bookingIdInvalid") {
       return res.sendStatus(httpStatus.BAD_REQUEST);
     }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return res.sendStatus(httpStatus.BAD_REQUEST);</span>
   }
-}</pre></td></tr></table></pre>
+}
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at Mon Dec 05 2022 17:03:19 GMT-0300 (Brasilia Standard Time)
+                at Mon Dec 05 2022 19:01:08 GMT-0300 (Brasilia Standard Time)
             </div>
         <script src="../../prettify.js"></script>
         <script>

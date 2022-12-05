@@ -8,7 +8,7 @@ import { bookingDoesNotBelongToUser, bookingIdInvalid, enrollmentNotFound, roomI
 
 async function getBooking(userId: number) {
   const booking = await bookingRepositor.findBookingByUserId(userId);
-  
+
   if(!booking) { 
     throw notFoundError();
   }
@@ -21,6 +21,7 @@ async function getBooking(userId: number) {
 
 async function postBookingService(userId: number, roomId: number) {
   await verifyRoom(roomId);
+
   await verifyTicketOfUser(userId);
 
   const booking = await bookingRepositor.createBooking(userId, roomId);
@@ -36,6 +37,7 @@ async function verifyRoom(roomId: number) {
 
   const bookingsAlreadyDone = await bookingRepositor.findBookingByRoomId(roomId);
   if( room.capacity <= bookingsAlreadyDone.length ) {
+    console.log("QUARTO CHEIO: ", room.capacity, bookingsAlreadyDone.length );
     throw roomIdInvalid();
   }
 }
@@ -43,7 +45,7 @@ async function verifyRoom(roomId: number) {
 async function verifyTicketOfUser(userId: number) {
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
   if(!enrollment) { 
-    throw enrollmentNotFound(); 
+    throw notFoundError(); 
   }
 
   const ticket = await ticketRepository.getTicketWithTypeByEnrollmentId(enrollment.id);
